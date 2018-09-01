@@ -7,4 +7,6 @@ using UnityEngine;
 public interface ITriggerTarget
 {
     void Trigger();
+
+    void Untrigger();
 }

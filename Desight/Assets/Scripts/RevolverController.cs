@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class RevolverController : MonoBehaviour
 {
-    private enum State
+    public enum State
     {
         IDLE,
         AIM,
         RECALL,
+        THROW
     }
 
     [SerializeField]
@@ -27,21 +28,22 @@ public class RevolverController : MonoBehaviour
     [SerializeField]
     private float RecallWindowTime = 0.9f;
 
-    private Rigidbody body;
-    private Animator animator;
+    public Animator Animator { get;private set; }
 
     public bool HasRevolver { get; set; }
 
+    private Rigidbody body;
+
     private bool canRecall;
 
-    private State state;
+    public State RevolverState { get; private set; }
 
     // Use this for initialization
     void Start()
     {
-        this.state = State.IDLE;
+        this.RevolverState = State.IDLE;
         this.body = RevolverTransform.GetComponent<Rigidbody>();
-        this.animator = RevolverHolderTransform.GetComponent<Animator>();
+        this.Animator = RevolverHolderTransform.GetComponent<Animator>();
         PickupRevolver();
     }
 
@@ -52,17 +54,17 @@ public class RevolverController : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                animator.SetTrigger("Aim");
-                state = State.AIM;
+                Animator.SetTrigger("Aim");
+                RevolverState = State.AIM;
             }
-            else if (Input.GetMouseButtonUp(0) && state == State.AIM)
+            else if (Input.GetMouseButtonUp(0) && RevolverState == State.AIM)
             {
                 ThrowRevolver();
             }
             else if (Input.GetMouseButtonDown(1))
             {
-                state = State.IDLE;
-                animator.SetTrigger("Throw");
+                RevolverState = State.IDLE;
+                Animator.SetTrigger("Throw");
             }
         }
         else
@@ -76,9 +78,9 @@ public class RevolverController : MonoBehaviour
                 }
             }
 
-            //  if (canRecall)
+             if (canRecall)
             {
-                if (Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButtonDown(0) && RevolverState != State.RECALL)
                 {
                     StartCoroutine(Recall());
                 }
@@ -88,7 +90,7 @@ public class RevolverController : MonoBehaviour
 
     private IEnumerator Recall()
     {
-        state = State.RECALL;
+        RevolverState = State.RECALL;
         body.isKinematic = true;
         while (!HasRevolver)
         {
@@ -96,13 +98,14 @@ public class RevolverController : MonoBehaviour
             RevolverTransform.transform.position = Vector3.MoveTowards(RevolverTransform.transform.position, RevolverHolderTransform.position, 0.4f);
             yield return null;
         }
-        animator.SetTrigger("Catch");
+        Animator.SetTrigger("Catch");
         yield return null;
     }
 
     private void ThrowRevolver()
     {
-        animator.SetTrigger("Throw");
+        RevolverState = State.THROW;
+        Animator.SetTrigger("Throw");
 
         HasRevolver = false;
         body.isKinematic = false;
@@ -132,6 +135,7 @@ public class RevolverController : MonoBehaviour
         Physics.IgnoreCollision(RevolverTransform.GetComponent<BoxCollider>(), GameManager.Instance.Player.Collider, true);
         RevolverTransform.parent = (RevolverHolderTransform);
         ResetRevolverTransform();
+        Animator.Play("Idle");
     }
 
     private void ResetRevolverTransform()

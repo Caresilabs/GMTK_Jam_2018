@@ -9,14 +9,22 @@ public class LaserRobot : MonoBehaviour, ITarget
     
     private void Update()
     {
-        Laser.SetPosition(0, transform.position);
+        var robotPos = transform.position + new Vector3(0, .9f, 0);
+        Laser.SetPosition(0, robotPos);
 
-        var target = transform.position;
+        var target = robotPos;
         RaycastHit hit;
 
         var cameraPos = GameManager.Instance.Player.RevolverController.Camera.transform.position - new Vector3(0,0.23f,0);
-        if (Physics.Raycast(transform.position, (cameraPos - transform.position).normalized, out hit)) {
-            target = hit.point;
+
+       // Debug.Log(Vector3.Dot((cameraPos - robotPos).normalized, transform.up));
+        if (Vector3.Dot((cameraPos - robotPos).normalized, transform.up) < -0.4f) // TODO duplicate code
+        {
+            if (Physics.Raycast(transform.position, (cameraPos - robotPos).normalized, out hit))
+            {
+                target = cameraPos;//hit.point;
+            }
+
         }
 
         Laser.SetPosition(1, target);

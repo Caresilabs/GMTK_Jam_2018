@@ -18,13 +18,16 @@ public class Revolver : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (controller.RevolverState != RevolverController.State.THROW)
+            return;
+
         ITarget target;
      
         if ((target = collision.transform.GetComponent<ITarget>()) != null)
         {
             target.OnHit();
             controller.OnTargetHit();
-            Instantiate(HitParticles, transform.position, Quaternion.identity);
+            Instantiate(HitParticles, transform.position, Quaternion.LookRotation(transform.position - controller.transform.position) * Quaternion.Euler(0,90,0), transform);
         }
 
         Debug.Log(collision.transform.name);

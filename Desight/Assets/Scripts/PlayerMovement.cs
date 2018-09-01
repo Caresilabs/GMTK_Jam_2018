@@ -56,7 +56,7 @@ public class PlayerMovement : MonoBehaviour
         Grounded = false;
         RaycastHit hit;
 
-        if (Physics.SphereCast(transform.position, 0.3f, Vector3.down, out hit, 0.9f))
+        if (Physics.SphereCast(transform.position, 0.3f, Vector3.down, out hit, 0.851f))
         {
             groundNormal = hit.normal;
             if (groundNormal.y < 0.25f) // Disable slope jumping
@@ -64,6 +64,7 @@ public class PlayerMovement : MonoBehaviour
 
             Grounded = true;
             allowJumpDelay = 0;
+            canJump = true;
         }
         //if (Physics.Raycast(transform.position, -transform.up, out hit)) //, 1.3f); 
         //{
@@ -120,9 +121,11 @@ public class PlayerMovement : MonoBehaviour
         // if ((canJump && Grounded) || allowJumpDelay < MAX_JUMP_TIME_DELAY)
         if (canJump && (Grounded || allowJumpDelay < MAX_JUMP_TIME_DELAY))
         {
-            if (Input.GetButton("Jump"))
+            if (Input.GetButtonDown("Jump"))
             {
                 Rigidbody.velocity = new Vector3(velocity.x, Mathf.Sqrt(2 * JumpHeight * -Physics.gravity.y), velocity.z);
+                GameManager.Instance.Player.RevolverController.Animator.SetTrigger("Jump");
+                canJump = false;
             }
         }
 
@@ -149,7 +152,7 @@ public class PlayerMovement : MonoBehaviour
                 velocityChange = (targetVelocity - velocity);
             }
 
-            float mx = groundNormal.y * 1.7f * 0.3f;
+            float mx = groundNormal.y * 1.3f * 0.3f;
 
             velocityChange.x = Mathf.Clamp(velocityChange.x, -mx, mx);
             velocityChange.z = Mathf.Clamp(velocityChange.z, -mx, mx);
@@ -164,8 +167,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void UpdateLook()
     {
-        float yRot = -Input.GetAxis("MouseY") * 180 * Time.deltaTime;
-        float xRot = Input.GetAxis("MouseX") * 180 * Time.deltaTime;
+        float yRot = -Input.GetAxis("MouseY") * 100 * Time.deltaTime;
+        float xRot = Input.GetAxis("MouseX") * 100 * Time.deltaTime;
 
         xView += xRot;
         transform.Rotate(Vector3.up, xRot);

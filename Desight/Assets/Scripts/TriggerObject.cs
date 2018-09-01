@@ -5,12 +5,12 @@ using UnityEngine;
 public class TriggerObject : MonoBehaviour, ITarget
 {
     [SerializeField]
-    private Transform Target;
+    protected Transform Target;
 
     [SerializeField]
-    private int Limits = 1;
+    protected int Limits = 1;
 
-    public void OnHit()
+    public virtual void OnHit()
     {
         if (Limits <= 0)
             return;

@@ -7,16 +7,21 @@ ModelImporter:
     100002: Lamp
     100004: Plane
     100006: //RootNode
+    100008: Revolver
     400000: Camera
     400002: Lamp
     400004: Plane
     400006: //RootNode
+    400008: Revolver
     2000000: Camera
     2100000: RevolverMaterial
     2100002: RevolverHandleMaterial
     2300000: Plane
+    2300002: Revolver
     3300000: Plane
+    3300002: Revolver
     4300000: Plane
+    4300002: Revolver
     10800000: Lamp
   externalObjects: {}
   materials:
