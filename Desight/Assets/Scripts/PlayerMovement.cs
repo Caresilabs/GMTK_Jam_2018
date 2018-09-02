@@ -43,10 +43,16 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
+    bool requestJump = false;
+
     // Update is called once per frame
     void Update()
     {
         UpdateLook();
+        if (Input.GetButtonDown("Jump"))
+        {
+            requestJump = true;
+        }
     }
 
     void FixedUpdate()
@@ -60,16 +66,18 @@ public class PlayerMovement : MonoBehaviour
         Grounded = false;
         RaycastHit hit;
 
-        if (Physics.SphereCast(transform.position, 0.3f, Vector3.down, out hit, 0.9f))
+        if (Physics.SphereCast(transform.position, 0.1f, Vector3.down, out hit, 0.855f))
         {
             groundNormal = hit.normal;
-            if (groundNormal.y < 0.25f) // Disable slope jumping
+            if (groundNormal.y < 0.2f) // Disable slope jumping
                 return;
 
             Grounded = true;
             allowJumpDelay = 0;
             canJump = true;
         }
+
+        Debug.Log(Grounded);
         //if (Physics.Raycast(transform.position, -transform.up, out hit)) //, 1.3f); 
         //{
         //    if (hit.distance <= 1.3f)
@@ -100,7 +108,6 @@ public class PlayerMovement : MonoBehaviour
         //        else
         //            groundNormal.Set(0, 1f, 0);
         //    }
-
         //}
     }
 
@@ -125,7 +132,7 @@ public class PlayerMovement : MonoBehaviour
         // if ((canJump && Grounded) || allowJumpDelay < MAX_JUMP_TIME_DELAY)
         if (canJump && (Grounded || allowJumpDelay < MAX_JUMP_TIME_DELAY))
         {
-            if (Input.GetButtonDown("Jump"))
+            if (requestJump)
             {
                 Rigidbody.velocity = new Vector3(velocity.x, Mathf.Sqrt(2 * JumpHeight * -Physics.gravity.y), velocity.z);
                 GameManager.Instance.Player.RevolverController.Animator.SetTrigger("Jump");
@@ -133,6 +140,7 @@ public class PlayerMovement : MonoBehaviour
                 canJump = false;
             }
         }
+        requestJump = false;
 
         if (Grounded)
         {
@@ -172,8 +180,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void UpdateLook()
     {
-        float yRot = -Input.GetAxis("MouseY") * 100 * Time.deltaTime;
-        float xRot = Input.GetAxis("MouseX") * 100 * Time.deltaTime;
+        float yRot = -Input.GetAxis("MouseY") * 75 * Time.deltaTime;
+        float xRot = Input.GetAxis("MouseX") * 75 * Time.deltaTime;
 
         xView += xRot;
         transform.Rotate(Vector3.up, xRot);

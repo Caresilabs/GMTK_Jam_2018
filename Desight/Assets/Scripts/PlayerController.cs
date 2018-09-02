@@ -20,19 +20,17 @@ public class PlayerController : MonoBehaviour {
 
     private void IntervalShake()
     {
-        Shake(4.1f, 0.033f);
-        Invoke("IntervalShake", 60);
+        var earthQuakeSound = GameObject.Find("Earthquake").GetComponent<AudioSource>();
+        earthQuakeSound.volume = 0.5f;
+        earthQuakeSound.Play();
+        Shake(9.1f, 0.02f);
+        Invoke("IntervalShake", 35);
     }
 
     private void Shake(float duration, float magnitude)
     {
         StartCoroutine(ShakeCoroutine(duration, magnitude));
     }
-
-    // Update is called once per frame
-    void Update () {
-		
-	}
 
     private void OnCollisionEnter(Collision collision)
     {

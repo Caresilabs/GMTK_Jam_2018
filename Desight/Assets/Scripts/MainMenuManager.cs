@@ -9,14 +9,15 @@ public class MainMenuManager : MonoBehaviour {
     // Use this for initialization
     void Awake () {
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     bool isLoading = false;
     public void StartGame()
     {
-        //SceneManager.LoadScene("DevScene");
-        if (!isLoading)
-            StartCoroutine(LoadYourAsyncScene());
+        SceneManager.LoadScene("DevScene");
+       // if (!isLoading)
+        //    StartCoroutine(LoadYourAsyncScene());
     }
 
     IEnumerator LoadYourAsyncScene()
@@ -29,6 +30,11 @@ public class MainMenuManager : MonoBehaviour {
         {
             yield return null;
         }
+    }
+
+    public void CloseGame()
+    {
+        Application.Quit();
     }
 
 }

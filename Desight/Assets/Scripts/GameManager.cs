@@ -23,9 +23,14 @@ public class GameManager : MonoBehaviour {
     void Awake () {
         Instance = this;
         this.Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-
-        Cursor.lockState = CursorLockMode.Locked;   // 
+   
         currentSpawn = Player.transform.position;
+    }
+
+    private void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;   // 
+        Cursor.visible = false;
     }
 
     public void SetRespawn(Vector3 position)

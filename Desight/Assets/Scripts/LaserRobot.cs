@@ -101,7 +101,7 @@ public class LaserRobot : MonoBehaviour, ITarget
             Quaternion toRotation = Quaternion.LookRotation(direction.normalized, Vector3.up);//Quaternion.FromToRotation(transform.forward, direction.normalized);
             transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, 20 * Time.deltaTime);
 
-            Laser.widthMultiplier += Time.deltaTime * 4f;
+            Laser.widthMultiplier += Time.deltaTime * 5f;
             if (Laser.widthMultiplier > 10)
                 Shoot();
         }

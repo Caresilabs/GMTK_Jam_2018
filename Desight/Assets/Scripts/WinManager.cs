@@ -14,6 +14,7 @@ public class WinManager : MonoBehaviour {
     void Awake () {
         TimeLeft.text = new TimeSpan(0, 0, Mathf.RoundToInt(PlayerPrefs.GetFloat("TimeLeft", 0))).ToString();
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void StartGame()

@@ -505,7 +505,7 @@ MonoBehaviour:
   HitSound: {fileID: 82253218963994878}
   LaserSound: {fileID: 82537528703520152}
   ShootSound: {fileID: 82290129866006216}
-  maxDist: 20
+  maxDist: 17.5
   wanderRadius: 0
   wanderTimer: 0
 --- !u!120 &120352045626892448
