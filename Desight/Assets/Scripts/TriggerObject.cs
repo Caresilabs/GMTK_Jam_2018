@@ -10,10 +10,16 @@ public class TriggerObject : MonoBehaviour, ITarget
     [SerializeField]
     protected int Limits = 1;
 
+    [SerializeField]
+    private AudioSource HitSound;
+
     public virtual void OnHit()
     {
         if (Limits <= 0)
             return;
+
+        if (HitSound != null)
+            HitSound.Play();
 
         Target.GetComponent<ITriggerTarget>().Trigger();
         Limits--;

@@ -15,6 +15,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float JumpHeight = 1.0f;
 
+
+    [SerializeField]
+    private AudioSource JumpAudio;
+
     public Rigidbody Rigidbody { get; private set; }
 
     public Camera Camera { get; private set; }
@@ -56,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
         Grounded = false;
         RaycastHit hit;
 
-        if (Physics.SphereCast(transform.position, 0.3f, Vector3.down, out hit, 0.851f))
+        if (Physics.SphereCast(transform.position, 0.3f, Vector3.down, out hit, 0.9f))
         {
             groundNormal = hit.normal;
             if (groundNormal.y < 0.25f) // Disable slope jumping
@@ -125,6 +129,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 Rigidbody.velocity = new Vector3(velocity.x, Mathf.Sqrt(2 * JumpHeight * -Physics.gravity.y), velocity.z);
                 GameManager.Instance.Player.RevolverController.Animator.SetTrigger("Jump");
+                JumpAudio.Play();
                 canJump = false;
             }
         }

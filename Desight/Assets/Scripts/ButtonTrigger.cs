@@ -16,20 +16,25 @@ public class ButtonTrigger : TriggerObject
     private void Start()
     {
         this.Renderer = GetComponent<Renderer>();
-        disabledColor = Renderer.materials[1].color;
+        disabledColor = Renderer.materials[1].GetColor("_EmissionColor");
     }
 
     public override void OnHit()
     {
+        if (pressed)
+            return;
+
         base.OnHit();
-        Renderer.materials[1].color = Color.green;
+        Renderer.materials[1].SetColor("_EmissionColor", Color.green);
         pressed = true;
-        Invoke("Disable", TimeOnline);
+        if (TimeOnline > 0)
+            Invoke("Disable", TimeOnline);
     }
 
     private void Disable()
     {
-        Renderer.materials[1].color = disabledColor;
+        //Renderer.materials[1].color = disabledColor;
+        Renderer.materials[1].SetColor("_EmissionColor", disabledColor);
         pressed = false;
         Limits++;
         Target.GetComponent<ITriggerTarget>().Untrigger();

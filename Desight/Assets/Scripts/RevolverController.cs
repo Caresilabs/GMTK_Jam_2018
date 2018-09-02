@@ -26,7 +26,10 @@ public class RevolverController : MonoBehaviour
     private float ThrowSpeed = 100;
 
     [SerializeField]
-    private float RecallWindowTime = 0.9f;
+    public float RecallWindowTime = 0.9f;
+
+    [SerializeField]
+    private AudioSource RecallAudio;
 
     public Animator Animator { get;private set; }
 
@@ -88,8 +91,21 @@ public class RevolverController : MonoBehaviour
         }
     }
 
+    public void ResetRevolver()
+    {
+        RevolverState = State.IDLE;
+        HasRevolver = true;
+        body.isKinematic = true;
+        Physics.IgnoreCollision(RevolverTransform.GetComponent<BoxCollider>(), GameManager.Instance.Player.Collider, true);
+        RevolverTransform.parent = (RevolverHolderTransform);
+        ResetRevolverTransform();
+        Animator.Play("Idle");
+    }
+
     private IEnumerator Recall()
     {
+        Time.timeScale = 1;
+        RecallAudio.Play();
         RevolverState = State.RECALL;
         body.isKinematic = true;
         while (!HasRevolver)
@@ -98,6 +114,7 @@ public class RevolverController : MonoBehaviour
             RevolverTransform.transform.position = Vector3.MoveTowards(RevolverTransform.transform.position, RevolverHolderTransform.position, 0.4f);
             yield return null;
         }
+        RecallAudio.Stop();
         Animator.SetTrigger("Catch");
         yield return null;
     }
@@ -130,6 +147,7 @@ public class RevolverController : MonoBehaviour
 
     public void PickupRevolver()
     {
+        RevolverState = State.IDLE;
         HasRevolver = true;
         body.isKinematic = true;
         Physics.IgnoreCollision(RevolverTransform.GetComponent<BoxCollider>(), GameManager.Instance.Player.Collider, true);

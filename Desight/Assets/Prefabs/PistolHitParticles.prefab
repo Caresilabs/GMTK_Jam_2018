@@ -4678,7 +4678,7 @@ ParticleSystem:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1142558030611872}
   serializedVersion: 5
-  lengthInSec: 0.8
+  lengthInSec: 0.7
   simulationSpeed: 1
   stopAction: 0
   looping: 0

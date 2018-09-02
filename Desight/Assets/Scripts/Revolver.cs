@@ -10,6 +10,11 @@ public class Revolver : MonoBehaviour
 
     private RevolverController controller;
 
+    [SerializeField]
+    private AudioSource RecallReadyAudio;
+
+    private int hits;
+
     // Use this for initialization
     void Start()
     {
@@ -25,11 +30,23 @@ public class Revolver : MonoBehaviour
      
         if ((target = collision.transform.GetComponent<ITarget>()) != null)
         {
+            hits++;
+            RecallReadyAudio.Play();
             target.OnHit();
             controller.OnTargetHit();
             Instantiate(HitParticles, transform.position, Quaternion.LookRotation(transform.position - controller.transform.position) * Quaternion.Euler(0,90,0), transform);
+
+            if (hits == 1)
+            {
+                Invoke("ResetTimeScale", controller.RecallWindowTime);
+                Time.timeScale = 0.04f;
+            }
         }
 
-        Debug.Log(collision.transform.name);
+    }
+
+    private void ResetTimeScale()
+    {
+        Time.timeScale = 1;
     }
 }
